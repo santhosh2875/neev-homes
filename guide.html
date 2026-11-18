@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Picture guide | Neev Homes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,400..700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --page: #f3f0e8;
+      --sheet: #fbfaf6;
+      --ink: #131c26;
+      --ink-soft: #55606c;
+      --line: #d9d3c5;
+      --brick: #c2512c;
+      --brick-deep: #a23f1f;
+      --tint: #f4e3da;
+      --sand: #f0d9c6;
+      --ok: #2d7a4f;
+      --display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+      --text: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--page);
+      color: var(--ink);
+      font-family: var(--text);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    :focus-visible { outline: 2px solid var(--brick); outline-offset: 2px; border-radius: 4px; }
+
+    a { color: var(--brick-deep); }
+    code { font-family: var(--mono); font-size: 0.88em; background: var(--tint); padding: 0.1em 0.35em; border-radius: 4px; }
+
+    /* ---------- Sticky bar: what is in the site so far ---------- */
+    .bar {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 20px;
+      padding: 10px clamp(16px, 4vw, 40px);
+      background: rgba(243, 240, 232, 0.94);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .progress { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 0.92rem; font-weight: 500; }
+    .meter { width: 120px; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+    .meter span { display: block; height: 100%; width: 0; background: var(--ok); transition: width 300ms ease; }
+
+    .linkbtn {
+      border: 0; background: none; padding: 0; font: inherit; font-size: 0.9rem;
+      color: var(--brick-deep); text-decoration: underline; text-underline-offset: 3px; cursor: pointer;
+    }
+
+    /* ---------- Page ---------- */
+    main { max-width: 860px; margin: 0 auto; padding: clamp(24px, 5vw, 56px) clamp(16px, 4vw, 40px) 80px; }
+
+    h1 { margin: 0 0 0.25em; font-family: var(--display); font-stretch: 82%; font-weight: 650; font-size: clamp(2.2rem, 5.2vw, 3.3rem); line-height: 1; letter-spacing: -0.02em; }
+    .lede { margin: 0 0 24px; max-width: 62ch; color: var(--ink-soft); font-size: 1.05rem; }
+
+    .step { margin-top: clamp(40px, 7vw, 72px); }
+    .step > h2 { display: flex; align-items: baseline; gap: 14px; margin: 0 0 6px; font-size: 1.45rem; font-weight: 700; line-height: 1.2; }
+    .step > h2 .num { font-family: var(--display); font-stretch: 82%; font-weight: 650; font-size: 2.2rem; color: var(--brick); }
+    .step > p { margin: 0 0 18px; max-width: 66ch; color: var(--ink-soft); }
+
+    /* Model recommendation */
+    .model { padding: 18px 20px; border-radius: 10px; background: var(--ink); color: var(--sheet); }
+    .model .label { margin: 0; font-size: 0.85rem; color: rgba(251, 250, 246, 0.7); }
+    .model .name { margin: 2px 0 6px; font-size: 1.45rem; font-weight: 700; line-height: 1.2; }
+    .model .name small { margin-left: 8px; font-size: 0.85rem; font-weight: 400; color: rgba(251, 250, 246, 0.7); }
+    .model .why { margin: 0 0 12px; max-width: 64ch; color: rgba(251, 250, 246, 0.86); }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+    .chips li { padding: 4px 11px; border-radius: 999px; background: rgba(240, 217, 198, 0.14); border: 1px solid rgba(240, 217, 198, 0.5); color: var(--sand); font-size: 0.88rem; font-weight: 500; }
+
+    /* One card per thing to generate */
+    .asset { margin-top: 14px; padding: 16px 18px; background: var(--sheet); border: 1px solid var(--line); border-radius: 10px; }
+    .asset.is-found { border-color: var(--ok); }
+    .asset-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-bottom: 10px; }
+    .asset-head h3 { margin: 0; font-size: 1.05rem; font-weight: 700; }
+    .asset-head .n { display: inline-grid; place-items: center; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 6px; background: var(--ink); color: var(--sheet); font-weight: 700; font-size: 0.92rem; }
+    .status { margin-left: auto; padding: 2px 10px; border-radius: 999px; font-size: 0.82rem; font-weight: 600; background: var(--page); color: var(--ink-soft); border: 1px solid var(--line); }
+    .is-found .status { background: #dff1e4; color: var(--ok); border-color: #a9d6b8; }
+
+    .attach { margin: 0 0 10px; padding: 8px 12px; border-radius: 8px; background: #f8ecd0; border: 1px solid #e6d3a3; font-size: 0.93rem; }
+    .attach b { font-weight: 700; }
+
+    .asset-body { display: flex; gap: 14px; align-items: flex-start; }
+    .prompt { flex: 1; margin: 0; padding: 12px 14px; border-left: 3px solid var(--brick); border-radius: 0 8px 8px 0; background: var(--tint); font-size: 0.95rem; white-space: pre-wrap; }
+    .preview { flex: none; width: 150px; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 6px; border: 1px solid var(--line); }
+    .preview[hidden] { display: none; }
+
+    .asset-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; margin-top: 12px; font-size: 0.9rem; color: var(--ink-soft); }
+    .copy { border: 0; border-radius: 6px; padding: 8px 16px; background: var(--brick); color: #fff; font: inherit; font-size: 0.9rem; font-weight: 600; cursor: pointer; }
+    .copy:hover { background: var(--brick-deep); }
+    .copy.is-done { background: var(--ok); }
+
+    .note { margin: 14px 0 0; padding: 12px 14px; border-radius: 10px; background: #f8ecd0; border: 1px solid #e6d3a3; font-size: 0.93rem; }
+
+    .files { margin: 0; padding: 14px 16px; border-radius: 10px; background: var(--ink); color: var(--sheet); font-family: var(--mono); font-size: 0.86rem; line-height: 1.7; overflow-x: auto; }
+
+    @media (max-width: 620px) {
+      .bar { position: static; }
+      .asset-body { flex-direction: column; }
+      .preview { width: 100%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) { .meter span { transition: none; } }
+  </style>
+</head>
+<body>
+  <div class="bar">
+    <div class="progress" aria-live="polite">
+      <div class="meter" aria-hidden="true"><span id="meterFill"></span></div>
+      <span id="progressText">Checking folder</span>
+      <button class="linkbtn" id="recheck" type="button">Check folder again</button>
+    </div>
+  </div>
+
+  <main>
+    <h1>Eight pictures and one clip</h1>
+    <p class="lede">
+      That is everything you need to make. Two pictures and one 15 second clip for the house
+      going up, three pictures for the kitchen and three for the garden. Make them in the
+      order below, because later pictures use earlier ones.
+    </p>
+
+    <p class="note">
+      <b>How to read each card:</b> the yellow line says which earlier picture to attach as the
+      reference image. If it says "Attach nothing", leave the reference empty. Then press
+      Copy prompt and paste it into Higgsfield.
+    </p>
+
+    <div id="groups"></div>
+
+    <section class="step">
+      <h2><span class="num" id="filesNum"></span> What to send me</h2>
+      <p>Download the eight pictures and the clip from Higgsfield and send them to me as they are, in one zip. I name them, cut the clip into the scroll film, sharpen it, and put everything in the site.</p>
+      <pre class="files">Picture 1   the empty plot           Picture 5   kitchen, charcoal
+Picture 2   the finished house       Picture 6   garden, lawn
+Picture 3   kitchen, ivory           Picture 7   garden, pool
+Picture 4   kitchen, sage            Picture 8   garden, pavilion
+The clip    15 seconds, the house going up</pre>
+    </section>
+  </main>
+
+  <script>
+  (() => {
+    "use strict";
+
+    const DIR = "assets/house";
+    const TYPES = ["jpg", "png", "webp", "jpeg"];
+
+    const LOOK = "Photorealistic architectural photograph, highly detailed, natural colours. No people, no vehicles, no text, no logos, no signboards.";
+
+    const PICTURE_MODEL = {
+      name: "Nano Banana Pro", by: "for all eight pictures",
+      why: "Marked Unlimited in your Higgsfield account, so with the Unlimited switch on it costs no credits. It is good at changing one thing in a picture while keeping the rest the same, which most of these pictures need.",
+      chips: ["Unlimited switch on", "Resolution 2K", "16:9"],
+    };
+    const CLIP_MODEL = {
+      name: "Seedance 2.5", by: "for the clip",
+      why: "Unlimited at 480p on your plan. 480p is fine, because I sharpen the clip afterwards.",
+      chips: ["Unlimited switch on", "480p", "15 seconds", "16:9", "Start frame: Picture 1"],
+    };
+
+    const KEEP_KITCHEN = "Edit the reference image. Keep the camera, the room, the window, the floor, the ceiling, the pendant lamps, the stools, and the position and shape of every cabinet and of the island exactly as they are. Change only the finishes.";
+    const KEEP_GARDEN = "Edit the reference image. Keep the camera, the house, the verandah, the trees, the walls and the light exactly as they are.";
+
+    const GROUPS = [
+      {
+        title: "The plot and the house",
+        model: PICTURE_MODEL,
+        intro: "Make the empty plot first. Then attach it and make the finished house from it, so both pictures show the same plot from the same spot.",
+        note: "<b>Check the two pictures side by side:</b> the trees, the sky and the camera must be in the same place in both, and the whole house must fit inside the picture. If something moved, make Picture 2 again. The headline sits over the lower left of the picture, so nothing important should be there.",
+        items: [
+          { n: 1, file: "plot", title: "The empty plot", ratio: "16:9", attach: null,
+            text: `A wide photograph of an empty house plot in a quiet, leafy neighbourhood in Bengaluru, India, on a clear morning. The camera is on the street side, about 3 metres above the ground, perfectly level, looking at the plot slightly from its front-left corner with a wide-angle lens. The plot is flat, bare red-brown earth, cleared and levelled, about 15 metres wide and 24 metres deep, and it fills the middle of the picture. White lime-powder lines are drawn on the earth showing the outline of a house, with short wooden pegs and string at the corners. A neat stack of steel bars and a small heap of sand sit at the far right edge of the plot. Behind the plot and along both sides stand tall rain trees and coconut palms, with a plain low grey wall in front of them. The foreground is a strip of bare earth. The upper third of the picture is soft blue morning sky with a few thin clouds. Even, gentle sunlight from the left. ${LOOK} 16:9.` },
+          { n: 2, file: "house", title: "The finished house", ratio: "16:9", attach: "Picture 1 (the empty plot)",
+            text: `Edit the reference image. Keep the camera position, the trees, the wall behind, the sky and the light exactly as they are, and build a finished modern two-storey house on the marked outline in the middle of the plot. The house has crisp white plastered walls, flat concrete roof slabs with deep overhangs, a tall double-height glass corner at the front, a band of grey granite cladding along the ground floor, vertical teak-wood slatted screens on the upper floor, a balcony with a glass railing, and a covered car porch on its left side. Around the house there is a clipped green lawn, a pale stone driveway leading to the porch, three young frangipani trees and low garden lights. Remove the steel bars, the sand, the pegs and the white lines. Warm light glows inside the windows. The whole house fits inside the picture, with sky above its roof and lawn in front of it. ${LOOK} 16:9.` },
+        ],
+      },
+      {
+        title: "The build film",
+        model: CLIP_MODEL,
+        intro: "One 15 second clip of the house going up. There are two prompts here: in the first the camera stays still, in the second it circles the house. The site uses only one clip, so try both and send me the ones you like.",
+        note: "<b>Check the clip:</b> you should see each step on its own: blue outline, concrete frame, red brick, white plaster, garden. The parts should move into place, not fade in. In the first clip the camera must stay still. In the second it must move in one smooth curve, with no jumps. No people or vehicles should appear. It costs nothing on Unlimited, so make it two or three times and send me all of them.",
+        items: [
+          { film: true, title: "The build film", ratio: "16:9, 15 seconds",
+            text: `One continuous shot, no cuts and no cross-fades. The camera is locked on a tripod and never moves, zooms or shakes. A cinematic construction time-lapse in which the house builds itself on this exact plot, piece by piece. Every part travels into place with crisp, physical, satisfying motion and then stays put. Nothing fades in, melts or morphs.
+
+0 to 2 seconds: glowing pale blue lines race along the white lines on the earth and rise into a see-through blueprint outline of the whole two-storey house, standing over the plot.
+
+2 to 4 seconds: the blue outline sinks into the ground, trenches open along the lines, steel bars drop in, and grey concrete floods the trenches and sets flat, with small puffs of dust.
+
+4 to 7 seconds: grey concrete columns push up out of the ground one after another from left to right, a flat floor slab slides across their tops, a second row of columns rises, and the roof slab with deep overhangs slides out over them. Bamboo scaffolding climbs up around the frame.
+
+7 to 10 seconds: red brick walls stack up row by row from the ground between the columns, like a wave moving from left to right, leaving sharp window openings.
+
+10 to 13 seconds: white plaster sweeps over the bricks from left to right like one clean brush stroke, the scaffolding folds down and is gone, glass panes slide into the openings and catch the sun, teak-wood slats click into place one by one, and the car porch roof slides out on the left.
+
+13 to 15 seconds: green lawn rolls out over the earth like a carpet, pale stone paving lays itself tile by tile up to the porch, three small trees grow up, and warm lights switch on inside. The picture settles exactly on the end frame and holds still.
+
+During the whole shot thin clouds drift quickly across the sky and soft shadows slide over the ground, as in a real time-lapse, while the trees and the wall behind stay exactly where they are. Photorealistic, sharp detail, natural colours. No people, no vehicles, no cranes, no text, no logos.` },
+          { film: true, title: "The build film, with the camera circling", ratio: "16:9, 15 seconds",
+            frames: "<b>Start frame:</b> Picture 1 (the empty plot). <b>End frame:</b> leave it empty. If there is a separate slot for a reference picture, put Picture 2 there.",
+            text: `One continuous shot, no cuts and no cross-fades. The camera glides slowly to the right in one smooth, steady arc around the plot, about a quarter of a circle, always at the same height and always pointing at the middle of the plot, with no shake and no zoom. It ends looking at the house from its front-right corner. While the camera circles, a house builds itself on the plot, piece by piece. Every part travels into place with crisp, physical motion and then stays put. Nothing fades in, melts or morphs.
+
+0 to 2 seconds: glowing pale blue lines race along the white lines on the earth and rise into a see-through blueprint outline of a two-storey house.
+
+2 to 4 seconds: the outline sinks into the ground, trenches open along the lines, and grey concrete floods them and sets flat.
+
+4 to 7 seconds: grey concrete columns push up out of the ground one after another, a floor slab slides across their tops, a second row of columns rises, and a flat roof slab with deep overhangs slides out. Bamboo scaffolding climbs up around the frame.
+
+7 to 10 seconds: red brick walls stack up row by row between the columns, leaving sharp window openings.
+
+10 to 13 seconds: white plaster sweeps over the bricks like one clean brush stroke, the scaffolding folds away, glass panes slide into the openings and catch the sun, and teak-wood slats click into place one by one.
+
+13 to 15 seconds: green lawn rolls out over the earth like a carpet, pale stone paving lays itself up to the porch, three small trees grow up, and warm lights switch on inside. The camera eases to a stop and the picture holds still.
+
+The finished house: white plastered walls, flat concrete roofs with deep overhangs, a tall double-height glass corner at the front right, a grey granite band along the ground floor, teak-wood slatted screens upstairs, a balcony with a glass railing, and a covered car porch on the left. The trees and the wall around the plot stay solid and real as the camera passes them. Photorealistic, sharp detail, natural colours. No people, no vehicles, no cranes, no text, no logos.` },
+        ],
+      },
+      {
+        title: "The kitchen, three ways",
+        model: null,
+        intro: "Same model as before (Nano Banana Pro, Unlimited, 2K, 16:9). Make the ivory kitchen first, then attach it for the other two, so only the colours change.",
+        note: "<b>Check the three kitchens:</b> the cabinets, the island, the window and the lamps must be in the same place in all three. Only the colours and materials should differ.",
+        items: [
+          { n: 3, file: "kitchen-1", title: "Kitchen: ivory and teak", ratio: "16:9", attach: null,
+            text: `A wide, straight-on photograph of a large kitchen in a modern Indian house. The camera stands in the middle of the room at eye level, perfectly level, facing the back wall, with a wide-angle lens so both side walls, the floor and the ceiling are in the picture. Along the back wall: a full row of flat ivory lacquered base cabinets and wall cabinets with slim brass handles, a white quartz worktop and a white quartz splashback, a built-in oven, and a steel hob with a chimney hood above it. In the middle of the room: a long island with a warm teak-wood base and a white quartz top, with three cane-backed stools on the near side. Two brass pendant lamps hang over the island. The left wall has tall ivory cabinets with a built-in fridge. The right wall has a wide window with black frames looking onto green garden trees. Pale grey stone floor and a white ceiling. A bowl of mangoes stands on the island. Soft daylight from the window. The upper-left corner of the picture is plain wall and ceiling. ${LOOK} 16:9.` },
+          { n: 4, file: "kitchen-2", title: "Kitchen: sage and terrazzo", ratio: "16:9", attach: "Picture 3 (the ivory kitchen)",
+            text: `${KEEP_KITCHEN} All the cabinets, including the island base, become sage green painted wood with framed panel doors and small round brass knobs. The worktops, the island top and the splashback become pale terrazzo with small chips of grey, cream and terracotta. Everything else stays the same. ${LOOK} 16:9.` },
+          { n: 5, file: "kitchen-3", title: "Kitchen: charcoal and marble", ratio: "16:9", attach: "Picture 3 (the ivory kitchen)",
+            text: `${KEEP_KITCHEN} All the cabinets, including the island base, become matt charcoal grey with vertical fluted fronts and no visible handles. The worktops, the island top and the splashback become white marble with soft grey veins. The tap becomes matt black. Everything else stays the same. ${LOOK} 16:9.` },
+        ],
+      },
+      {
+        title: "The garden, three ways",
+        model: null,
+        intro: "Same model again. Attach the finished house (Picture 2) to make the back garden, so it is the same house. Then attach that garden picture for the pool and the pavilion.",
+        note: "<b>Check the three gardens:</b> the house, the trees and the walls must be the same in all three. Only the middle of the lawn should change. The buttons sit over the bottom left of the picture.",
+        items: [
+          { n: 6, file: "garden-1", title: "Garden: lawn and frangipani", ratio: "16:9", attach: "Picture 2 (the finished house)",
+            text: `The same house as in the reference image, now seen from its back garden in late afternoon light. The camera is at the far end of the garden, about 3 metres above the ground, perfectly level, looking at the back of the house with a wide-angle lens. The back of the house has the same white plastered walls, the same flat concrete roofs with deep overhangs and the same teak-wood slatted screens upstairs, with wide sliding glass doors that open onto a covered stone verandah with two cane chairs. The house fills the upper half of the picture. The lower half is a broad, flat, clipped green lawn, with a stepping-stone path along its left side and three frangipani trees in flower along its right side. A white garden wall covered in creepers runs along both sides, with tall rain trees and coconut palms behind it. The middle of the lawn is open and empty. ${LOOK} 16:9.` },
+          { n: 7, file: "garden-2", title: "Garden: lap pool", ratio: "16:9", attach: "Picture 6 (the lawn garden)",
+            text: `${KEEP_GARDEN} In the open middle of the lawn add a long, narrow lap pool, 12 metres long, running across the picture parallel to the house, with clear turquoise water and a pale stone deck around it, and two teak sun loungers with white cushions on the deck. The rest of the lawn, the path and the frangipani trees stay. ${LOOK} 16:9.` },
+          { n: 8, file: "garden-3", title: "Garden: pavilion and fire pit", ratio: "16:9", attach: "Picture 6 (the lawn garden)",
+            text: `${KEEP_GARDEN} In the open middle of the lawn add an open teak-wood pavilion with a flat slatted roof, with a dining table and eight chairs under it. Beside the pavilion add a round sunken stone fire pit with a curved stone bench around it and a small fire burning. The rest of the lawn, the path and the frangipani trees stay. ${LOOK} 16:9.` },
+        ],
+      },
+    ];
+
+    const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+    const modelBox = (m) =>
+      `<div class="model"><p class="label">Model to pick in Higgsfield</p>` +
+      `<p class="name">${esc(m.name)}<small>${esc(m.by)}</small></p>` +
+      `<p class="why">${esc(m.why)}</p>` +
+      `<ul class="chips">${m.chips.map((c) => `<li>${esc(c)}</li>`).join("")}</ul></div>`;
+
+    const cards = [];
+    const filmCards = [];
+    GROUPS.forEach((group, i) => {
+      const section = document.createElement("section");
+      section.className = "step";
+      section.innerHTML =
+        `<h2><span class="num">${i + 1}</span> ${esc(group.title)}</h2>` +
+        `<p>${esc(group.intro)}</p>` +
+        (group.model ? modelBox(group.model) : "") +
+        (group.note ? `<p class="note">${group.note}</p>` : "");
+      group.items.forEach((item) => {
+        const el = document.createElement("article");
+        el.className = "asset";
+        const attach = item.film
+          ? item.frames || `<b>Start frame:</b> Picture 1 (the empty plot). <b>End frame:</b> Picture 2 (the finished house).`
+          : item.attach ? `<b>Attach:</b> ${esc(item.attach)}` : `<b>Attach nothing.</b>`;
+        const where = item.film ? "Plays in the site as you scroll" : `Goes in the site as <code>${esc(item.file)}.jpg</code>`;
+        el.innerHTML =
+          `<div class="asset-head">${item.film ? "" : `<span class="n">${item.n}</span>`}<h3>${esc(item.title)} (${item.ratio})</h3><span class="status">Not in the site yet</span></div>` +
+          `<p class="attach">${attach}</p>` +
+          `<div class="asset-body"><p class="prompt"></p><img class="preview" alt="" hidden></div>` +
+          `<div class="asset-foot"><button class="copy" type="button">Copy prompt</button><span>${where}</span></div>`;
+        el.querySelector(".prompt").textContent = item.text;
+        el.querySelector(".copy").addEventListener("click", (e) => copy(item.text, e.currentTarget));
+        section.append(el);
+        if (item.film) filmCards.push(el);
+        else cards.push({ el, file: item.file });
+      });
+      document.getElementById("groups").append(section);
+    });
+    document.getElementById("filesNum").textContent = String(GROUPS.length + 1);
+
+    async function copy(text, button) {
+      let ok = false;
+      try { await navigator.clipboard.writeText(text); ok = true; }
+      catch (_) {
+        const ta = document.createElement("textarea");
+        ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+        document.body.append(ta); ta.select();
+        try { ok = document.execCommand("copy"); } catch (_) { ok = false; }
+        ta.remove();
+      }
+      button.textContent = ok ? "Copied" : "Select the text and copy it";
+      button.classList.toggle("is-done", ok);
+      window.setTimeout(() => { button.textContent = "Copy prompt"; button.classList.remove("is-done"); }, 1800);
+    }
+
+    function findStill(file) {
+      return new Promise((resolve) => {
+        const attempt = (n) => {
+          if (n >= TYPES.length) return resolve(null);
+          const url = `${DIR}/${file}.${TYPES[n]}`;
+          const img = new Image();
+          img.onload = () => resolve(url);
+          img.onerror = () => attempt(n + 1);
+          img.src = `${url}?t=${Date.now()}`;
+        };
+        attempt(0);
+      });
+    }
+
+    let run = 0;
+    async function checkFolder() {
+      const mine = ++run;
+      const found = await Promise.all(cards.map((c) => findStill(c.file)));
+      // The film is in the site once the clip has been cut into frames.
+      const hasFilm = await fetch(`assets/film/manifest.json?t=${Date.now()}`).then((r) => r.ok).catch(() => false);
+      if (mine !== run) return;
+      found.forEach((url, i) => {
+        const card = cards[i];
+        card.el.classList.toggle("is-found", Boolean(url));
+        card.el.querySelector(".status").textContent = url ? "In the site" : "Not in the site yet";
+        const preview = card.el.querySelector(".preview");
+        preview.hidden = !url;
+        if (url) preview.src = url;
+      });
+      filmCards.forEach((card) => {
+        card.classList.toggle("is-found", hasFilm);
+        card.querySelector(".status").textContent = hasFilm ? "In the site" : "Not in the site yet";
+      });
+
+      const needed = cards.length + 1;
+      const done = found.filter(Boolean).length + (hasFilm ? 1 : 0);
+      document.getElementById("meterFill").style.width = `${(done / needed) * 100}%`;
+      document.getElementById("progressText").textContent =
+        done === needed ? "All eight pictures and the film are in the site" : `${done} of ${needed} in the site`;
+    }
+
+    document.getElementById("recheck").addEventListener("click", checkFolder);
+    window.addEventListener("focus", checkFolder);
+    checkFolder();
+  })();
+  </script>
+</body>
+</html>

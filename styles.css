@@ -1,0 +1,1016 @@
+:root {
+  --ink: #131c26;          /* blueprint night: text, and the dark sections */
+  --ink-2: #1d2a38;
+  --paper: #f3f0e8;        /* fresh plaster: the page, and text on dark */
+  --paper-2: #e6e1d4;
+  --soft: rgba(19, 28, 38, 0.68);
+  --rule: rgba(19, 28, 38, 0.16);
+  --chalk: rgba(243, 240, 232, 0.8);
+  --chalk-faint: rgba(243, 240, 232, 0.34);
+  --brick: #c2512c;        /* the one accent */
+  --brick-deep: #a23f1f;
+
+  --display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --text: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+
+  --pad: clamp(18px, 4vw, 64px);
+  --bar-h: 72px;
+  --corner: 3px;           /* a building site is square: small corners everywhere */
+  --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-padding-top: 0;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--text);
+  font-size: 17px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+ol,
+dl,
+dd {
+  margin: 0;
+  padding: 0;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--brick);
+  outline-offset: 3px;
+}
+
+.skip {
+  position: fixed;
+  left: 12px;
+  top: -80px;
+  z-index: 60;
+  padding: 10px 16px;
+  border-radius: var(--corner);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.skip:focus {
+  top: 12px;
+}
+
+.wrap {
+  width: min(1180px, 100% - 2 * var(--pad));
+  margin: 0 auto;
+}
+
+/* Small labels, set like the notes on a drawing. */
+.tag {
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: 0.74rem;
+  line-height: 1.4;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.display {
+  font-family: var(--display);
+  font-stretch: 82%;
+  font-weight: 650;
+  font-size: clamp(2.4rem, 5vw, 4.4rem);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+/* A picture slot. Empty slots say which file they are waiting for. */
+.pic {
+  background: var(--ink-2) center / cover no-repeat;
+}
+
+.pic.is-empty {
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--chalk);
+  background-image: repeating-linear-gradient(135deg, rgba(243, 240, 232, 0.05) 0 14px, transparent 14px 28px);
+}
+
+.pic.is-empty::after {
+  content: "Add " attr(data-file) " to assets/house";
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  display: inline-block;
+  padding: 0.62em 1.2em;
+  border: 0;
+  border-radius: var(--corner);
+  background: var(--brick);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1.3;
+  cursor: pointer;
+  transition: background-color 180ms ease;
+}
+
+.btn:hover {
+  background: var(--brick-deep);
+}
+
+.btn-big {
+  padding: 0.85em 1.6em;
+  font-size: 1rem;
+}
+
+/* ---------- Header: three pieces that read on any picture ---------- */
+
+.bar {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  height: var(--bar-h);
+  padding: 0 var(--pad);
+  pointer-events: none;
+}
+
+.bar > * {
+  pointer-events: auto;
+}
+
+.mark {
+  padding: 7px 14px 8px;
+  border-radius: var(--corner);
+  background: var(--paper);
+  box-shadow: 0 0 0 1px var(--rule);
+  font-family: var(--display);
+  font-stretch: 82%;
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+.mark small {
+  margin-left: 4px;
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: 0.68rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--soft);
+}
+
+.bar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.est {
+  padding: 9px 13px;
+  border-radius: var(--corner);
+  background: rgba(19, 28, 38, 0.86);
+  color: var(--paper);
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: 0.8rem;
+  line-height: 1.3;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.est-label {
+  color: var(--chalk-faint);
+  color: rgba(243, 240, 232, 0.6);
+}
+
+.est.is-new {
+  animation: nod 520ms var(--ease);
+}
+
+@keyframes nod {
+  0% { background: var(--brick); transform: translateY(-3px); }
+  100% { background: rgba(19, 28, 38, 0.86); transform: none; }
+}
+
+/* ---------- Opening: a house going up ---------- */
+
+.build {
+  position: relative;
+  /* one screen to arrive on, one stretch per stage, then a hold on the finished house */
+  height: calc(100dvh + (var(--n, 4) - 1) * var(--stretch, 1.3) * 100vh + 40vh);
+}
+
+.build-pin {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  min-height: 500px;
+  overflow: hidden;
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.build-film {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.build-shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(13, 20, 28, 0.42), rgba(13, 20, 28, 0) 22%),
+    linear-gradient(to left, rgba(13, 20, 28, 0.5), rgba(13, 20, 28, 0) 26%),
+    linear-gradient(to right, rgba(13, 20, 28, 0.7), rgba(13, 20, 28, 0.24) 38%, rgba(13, 20, 28, 0) 60%),
+    linear-gradient(to top, rgba(13, 20, 28, 0.55), rgba(13, 20, 28, 0) 42%);
+}
+
+.captions {
+  position: absolute;
+  left: var(--pad);
+  bottom: clamp(44px, 8vh, 88px);
+  width: min(41rem, calc(100% - 2 * var(--pad)));
+}
+
+.caption {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(14px);
+  pointer-events: none;
+  transition: opacity 260ms ease, transform 420ms var(--ease);
+}
+
+.caption.is-on {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+  transition-delay: 160ms;
+}
+
+.caption .tag {
+  margin-bottom: 16px;
+  padding-left: 44px;
+  color: var(--chalk);
+  /* a short rule, like a dimension line */
+  background: linear-gradient(currentColor, currentColor) left center / 32px 1px no-repeat;
+}
+
+.caption h1,
+.caption h2 {
+  font-family: var(--display);
+  font-stretch: 80%;
+  font-weight: 650;
+  font-size: clamp(2.7rem, 6.2vw, 5.8rem);
+  line-height: 0.94;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.caption-text {
+  max-width: 42ch;
+  margin-top: 18px;
+  color: var(--chalk);
+  font-size: 1.08rem;
+}
+
+.caption .btn {
+  margin-top: 24px;
+}
+
+/* The levelling staff, down the right-hand side: the weeks of the build.
+   --level (0 to 1) is how far up the build has got. */
+.staff {
+  --level: 0;
+  --ticks: 11;
+  position: absolute;
+  right: var(--pad);
+  top: 54%;
+  width: 190px;
+  height: min(50vh, 440px);
+  transform: translateY(-50%);
+}
+
+.staff-read {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 36px);
+  display: grid;
+  justify-items: end;
+  color: var(--chalk);
+}
+
+.staff-read b {
+  font-family: var(--display);
+  font-stretch: 80%;
+  font-weight: 650;
+  font-size: 3.2rem;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  color: var(--paper);
+  font-variant-numeric: tabular-nums;
+}
+
+.staff-line {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 14px;
+  /* the spine on the right, and a tick every four weeks */
+  background:
+    linear-gradient(var(--chalk-faint), var(--chalk-faint)) right / 1px 100% no-repeat,
+    linear-gradient(var(--chalk-faint), var(--chalk-faint)) top / 100% 1px no-repeat,
+    repeating-linear-gradient(to top, var(--chalk-faint) 0 1px, transparent 1px calc(100% / var(--ticks)));
+}
+
+.staff-fill {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 3px;
+  height: calc(var(--level) * 100%);
+  background: var(--paper);
+}
+
+.staff-head {
+  position: absolute;
+  right: -5px;
+  bottom: calc(var(--level) * 100%);
+  width: 13px;
+  height: 13px;
+  background: var(--brick);
+  border: 2px solid var(--paper);
+  transform: translateY(50%) rotate(45deg);
+}
+
+.staff-stops li {
+  position: absolute;
+  right: 26px;
+  transform: translateY(50%);
+}
+
+.staff-stops button {
+  display: grid;
+  justify-items: end;
+  padding: 4px 0 4px 12px;
+  border: 0;
+  background: none;
+  color: var(--paper);
+  text-align: right;
+  opacity: 0.5;
+  cursor: pointer;
+  transition: opacity 250ms ease;
+}
+
+.staff-stops button:hover {
+  opacity: 0.85;
+}
+
+.staff-stops .is-done button {
+  opacity: 0.78;
+}
+
+.staff-stops [aria-current] button {
+  opacity: 1;
+}
+
+.stop-name {
+  font-family: var(--display);
+  font-stretch: 82%;
+  font-weight: 650;
+  font-size: 1.22rem;
+  line-height: 1.1;
+}
+
+.staff-stops .tag {
+  font-size: 0.66rem;
+  color: var(--chalk);
+}
+
+/* Watch the build */
+.watch {
+  position: absolute;
+  right: var(--pad);
+  bottom: clamp(44px, 8vh, 88px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px 10px 13px;
+  border: 1px solid var(--chalk-faint);
+  border-radius: var(--corner);
+  background: rgba(19, 28, 38, 0.6);
+  color: var(--paper);
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 180ms ease, border-color 180ms ease;
+}
+
+.watch:hover {
+  background: rgba(19, 28, 38, 0.86);
+  border-color: var(--paper);
+}
+
+.watch-icon {
+  width: 0;
+  height: 0;
+  border: solid transparent;
+  border-width: 6px 0 6px 10px;
+  border-left-color: currentColor;
+}
+
+.watch.is-playing .watch-icon {
+  width: 10px;
+  height: 12px;
+  border: solid currentColor;
+  border-width: 0 3px;
+}
+
+.build-bar {
+  display: none;
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 3px;
+  background: rgba(243, 240, 232, 0.2);
+}
+
+.build-bar span {
+  display: block;
+  height: 100%;
+  background: var(--paper);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+/* ---------- Kitchen and garden: pick a finish ---------- */
+
+.room {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 32px;
+  min-height: 100dvh;
+  padding: calc(var(--bar-h) + 18px) var(--pad) clamp(28px, 5vh, 48px);
+  overflow: hidden;
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.room + .room {
+  border-top: 1px solid rgba(243, 240, 232, 0.14);
+}
+
+.room-pics,
+.room-shade,
+.room-pics > .pic {
+  position: absolute;
+  inset: 0;
+}
+
+.room-pics {
+  z-index: -2;
+}
+
+.room-shade {
+  z-index: -1;
+  background:
+    linear-gradient(to bottom, rgba(13, 20, 28, 0.6), rgba(13, 20, 28, 0) 34%),
+    linear-gradient(to top, rgba(13, 20, 28, 0.72), rgba(13, 20, 28, 0) 40%);
+}
+
+.room-pics > .pic {
+  opacity: 0;
+  transition: opacity 700ms ease;
+}
+
+.room-pics > .pic.is-on {
+  opacity: 1;
+}
+
+.room-head .tag {
+  margin-bottom: 10px;
+  color: var(--chalk);
+}
+
+.room-foot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px 40px;
+}
+
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 9px 16px 9px 10px;
+  border: 1px solid var(--chalk-faint);
+  border-radius: var(--corner);
+  background: rgba(19, 28, 38, 0.72);
+  color: var(--paper);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease, transform 200ms var(--ease);
+}
+
+.option:hover {
+  border-color: var(--paper);
+  transform: translateY(-2px);
+}
+
+.option[aria-pressed="true"] {
+  background: var(--paper);
+  border-color: var(--paper);
+  color: var(--ink);
+}
+
+.swatch {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid rgba(243, 240, 232, 0.9);
+  box-shadow: 0 0 0 1px rgba(19, 28, 38, 0.25);
+}
+
+.option-words {
+  display: grid;
+}
+
+.option-words b {
+  font-weight: 600;
+  font-size: 0.98rem;
+  line-height: 1.25;
+}
+
+.option-words small {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  opacity: 0.74;
+}
+
+.pick {
+  flex: none;
+  width: min(21rem, 100%);
+  padding-left: 16px;
+  border-left: 1px solid var(--chalk-faint);
+}
+
+.pick-text {
+  color: var(--chalk);
+  font-size: 0.98rem;
+}
+
+.pick-next {
+  display: inline-block;
+  margin-top: 10px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid currentColor;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.pick-next::after {
+  content: " \2192";
+}
+
+.pick-next:hover {
+  color: #fff;
+  border-bottom-color: var(--brick);
+}
+
+/* ---------- The estimate sheet and the form ---------- */
+
+.start {
+  padding: clamp(72px, 10vw, 150px) 0 clamp(56px, 7vw, 100px);
+}
+
+.start-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: clamp(36px, 6vw, 96px);
+  align-items: start;
+}
+
+.start .tag {
+  color: var(--brick-deep);
+}
+
+.start .display {
+  margin-top: 10px;
+}
+
+/* Each row: what it is on the left, a dotted leader, the amount on the right. */
+.sheet {
+  margin-top: clamp(26px, 3.4vw, 44px);
+  border-top: 2px solid var(--ink);
+}
+
+.sheet > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 16px;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.sheet dt {
+  display: grid;
+}
+
+.sheet dt b {
+  font-weight: 600;
+}
+
+.sheet dt span {
+  font-size: 0.92rem;
+  color: var(--soft);
+}
+
+.sheet dd {
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: 0.92rem;
+  white-space: nowrap;
+}
+
+.sheet .sheet-total {
+  padding: 20px 0 0;
+  border-bottom: 0;
+}
+
+.sheet-total dt b {
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: 0.74rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--brick-deep);
+}
+
+.sheet-total dd {
+  font-family: var(--display);
+  font-stretch: 80%;
+  font-weight: 650;
+  font-size: clamp(1.7rem, 3.2vw, 2.7rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.start-note {
+  max-width: 52ch;
+  margin-top: 22px;
+  font-size: 0.95rem;
+  color: var(--soft);
+}
+
+.form {
+  display: grid;
+  gap: 16px;
+  padding: clamp(22px, 2.6vw, 34px);
+  border-radius: var(--corner);
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+}
+
+.field label {
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+
+.optional {
+  font-weight: 400;
+  color: var(--chalk);
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid rgba(243, 240, 232, 0.32);
+  border-radius: var(--corner);
+  background: rgba(243, 240, 232, 0.06);
+  color: var(--paper);
+}
+
+.field input:focus,
+.field textarea:focus {
+  outline: 2px solid var(--paper);
+  outline-offset: 1px;
+}
+
+.field [aria-invalid="true"] {
+  border-color: #ff9a7a;
+}
+
+.field-error {
+  min-height: 0;
+  font-size: 0.86rem;
+  color: #ffb39a;
+}
+
+.form .btn {
+  justify-self: start;
+  margin-top: 4px;
+}
+
+.form-status {
+  font-size: 0.9rem;
+  color: var(--chalk);
+}
+
+.form-status:empty,
+.field-error:empty {
+  display: none;
+}
+
+.form-contact {
+  padding-top: 14px;
+  border-top: 1px solid rgba(243, 240, 232, 0.18);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--chalk);
+}
+
+.form-contact a:hover {
+  color: #fff;
+}
+
+.promises {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(20px, 3vw, 48px);
+  margin-top: clamp(56px, 8vw, 110px);
+  padding-top: 26px;
+  border-top: 1px solid var(--rule);
+}
+
+.promises .tag {
+  color: var(--brick-deep);
+}
+
+.promises h3 {
+  margin-top: 8px;
+  font-family: var(--display);
+  font-stretch: 84%;
+  font-weight: 650;
+  font-size: 1.45rem;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.promises p {
+  margin-top: 6px;
+  max-width: 34ch;
+  font-size: 0.96rem;
+  color: var(--soft);
+}
+
+/* ---------- Footer ---------- */
+
+.footer {
+  padding: 30px 0 38px;
+  background: var(--ink);
+  color: var(--chalk);
+  font-size: 0.9rem;
+}
+
+.footer-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 28px;
+}
+
+.footer-mark {
+  font-family: var(--display);
+  font-stretch: 82%;
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: var(--paper);
+}
+
+.footer-note {
+  margin-left: auto;
+  max-width: 54ch;
+  font-size: 0.84rem;
+}
+
+/* ---------- Narrower windows ---------- */
+
+@media (max-width: 1000px) {
+  .staff {
+    width: 150px;
+  }
+
+  .room-foot {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .start-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- Phones ---------- */
+
+@media (max-width: 760px) {
+  :root {
+    --bar-h: 60px;
+  }
+
+  body {
+    font-size: 16px;
+  }
+
+  .mark {
+    padding: 6px 11px 7px;
+    font-size: 1.25rem;
+  }
+
+  .mark small {
+    display: none;
+  }
+
+  .bar .btn {
+    display: none;
+  }
+
+  .est {
+    font-size: 0.74rem;
+  }
+
+  /* The staff gives way to a thin bar along the bottom edge. */
+  .staff {
+    display: none;
+  }
+
+  .build-bar {
+    display: block;
+  }
+
+  .build-shade {
+    background:
+      linear-gradient(to bottom, rgba(13, 20, 28, 0.42), rgba(13, 20, 28, 0) 22%),
+      linear-gradient(to top, rgba(13, 20, 28, 0.86), rgba(13, 20, 28, 0.5) 34%, rgba(13, 20, 28, 0) 62%);
+  }
+
+  .captions {
+    bottom: 34px;
+  }
+
+  .caption h1,
+  .caption h2 {
+    font-size: clamp(2.3rem, 11.5vw, 3.2rem);
+  }
+
+  .caption-text {
+    margin-top: 12px;
+    font-size: 1rem;
+  }
+
+  .caption .btn {
+    margin-top: 16px;
+  }
+
+  .watch {
+    right: auto;
+    left: var(--pad);
+    bottom: auto;
+    top: calc(var(--bar-h) + 6px);
+  }
+
+  /* A room is a normal page: its title, the picture, then the choices. */
+  .room {
+    justify-content: flex-start;
+    gap: 0;
+    min-height: 0;
+    padding: calc(var(--bar-h) + 12px) 0 36px;
+  }
+
+  .room-head {
+    order: 0;
+    padding: 0 var(--pad);
+  }
+
+  .room-pics {
+    order: 1;
+    position: relative;
+    inset: auto;
+    z-index: 0;
+    aspect-ratio: 4 / 3;
+    margin-top: 18px;
+  }
+
+  .room-foot {
+    order: 2;
+  }
+
+  .room-shade {
+    display: none;
+  }
+
+  .room-foot {
+    gap: 18px;
+    padding: 18px var(--pad) 0;
+  }
+
+  .options {
+    display: grid;
+    width: 100%;
+  }
+
+  .option:hover {
+    transform: none;
+  }
+
+  .pick {
+    width: 100%;
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .promises {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-note {
+    margin-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
